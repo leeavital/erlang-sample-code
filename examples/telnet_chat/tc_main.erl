@@ -4,15 +4,17 @@
 
 
 init() ->
-  {ok, LSock} = gen_tcp:listen(5678, [binary, {packet, 0}, {active, false}]),
-  loop( LSock ).
+  {ok, LSock} = gen_tcp:listen(8999, [binary, {packet, 0}, {active, false}]),
+  ConnectedPool = spawn( connected_pool, loop, [ [] ] ),
+  loop( LSock, ConnectedPool ).
 
 
-loop( Sock ) ->
+loop( Sock, ConnectedPool ) ->
   case gen_tcp:accept( Sock ) of
     {ok, Cli} ->
-      spawn( tc_client, loop, [Cli] ),
-      loop( Sock );
+      CliP = spawn( tc_client, loop, [Cli, ConnectedPool] ),
+      ConnectedPool ! {add_cli, CliP},
+      loop( Sock, ConnectedPool );
     _ ->
       io:format( "error~n" )
   end.
