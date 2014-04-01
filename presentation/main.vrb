@@ -1,22 +1,12 @@
-\frametitle{Concurrency Primitives}
-    \begin{lstlisting}
-ping( ) ->
-  receive
-    {ping, From} ->
-      io:format( "ping ~n" ),
-      timer:sleep( 500 ),
-      From ! {pong, self()}
-  end.
-pong( ) ->
-  timer:sleep( 500 ),
-  Ping = spawn( ?MODULE, ping, [] ),
-  Ping ! {ping, self()},
-  receive
-    {pong, _} ->
-      io:format( "pong~n" )
-  end.
-ping_pong() -> pong().
 
-ping_pong_async() -> spawn(?MODULE, pong, [] ).
-    \end{lstlisting}
+  \frametitle{Distributed Erlang}
+  \begin{Verbatim}
+    $ erl -sname larry
+    (larry) 1> L = fun
+      receive {P, Msg} ->
+        P ! Msg
+      end
+    end.
+    (larry 2> spanw( L ).
+  \end{Verbatim}
 

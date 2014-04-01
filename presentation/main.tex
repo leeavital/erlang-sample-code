@@ -3,6 +3,7 @@
 \usetheme{Hannover}
 
 \usepackage{listings}
+\usepackage{fancyvrb}
 \usepackage{color}
 
 \title{Erlang: An Introduction}
@@ -135,5 +136,37 @@ ping_pong_async() -> spawn(?MODULE, pong, [] ).
     \end{lstlisting}
 
 \end{frame}
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Distributed erlang
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+
+  \frametitle{Distributed Erlang}
+  \begin{Verbatim}
+    $ erl -sname larry
+    (larry) 1> L = fun() ->
+      receive {P, Msg} ->
+        P ! Msg
+      end
+    end.
+    (larry) 2> register( echo, spawn( L ) ).
+    true
+  \end{Verbatim}
+
+  \begin{Verbatim}
+  $ erl   -sname moe
+  (moe) 1> {larry, echo@larry} ! "Hello Larry!"
+  "Hello Larry"
+  \end{Verbatim}
+
+\end{frame}
+
 
 \end{document}
