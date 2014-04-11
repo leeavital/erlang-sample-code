@@ -7,11 +7,8 @@
 -export( [add_client/1] ).
 
 
-
-
 start_link() ->
   supervisor:start_link( {local, ?MODULE}, ?MODULE, [] ).
-
 
 
 add_client( Socket ) ->
@@ -23,5 +20,5 @@ init( _ ) ->
     RestartStrat = one_for_one,
     MaxR = 1,
     MaxT = 1000,
-    ChildSpec = [],
+    ChildSpec = [ {c_serve, {tc_cli_serve, start_link, []}, permanent, infinity, worker, dynamic} ],
     {ok, {{RestartStrat,MaxR,MaxT}, ChildSpec}}.

@@ -11,7 +11,7 @@ loop( Sock ) ->
   case gen_tcp:recv( Sock, 0 ) of
     {ok, Msg} ->
         io:format( "Message: ~p~n", [Msg] ),
-        tc_cli_serve:send_message( Msg ),
+        tc_cli_serve:send_message( Msg, Sock ),
         loop( Sock );
     _ ->
       io:format( "exiting..." ),
