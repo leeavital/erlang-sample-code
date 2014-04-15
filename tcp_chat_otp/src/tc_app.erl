@@ -7,7 +7,7 @@
 
 
 start( _, _ ) ->
-  {ok, Sock} = gen_tcp:listen( 8000, [{active, false}] ),
+  {ok, Sock} = gen_tcp:listen( 7000, [{active, false}] ),
   {ok, Sup} = tc_sup:start_link(),
   io:format( "Spawned a sock~n" ),
   spawn( fun() -> loop( Sock ) end ),

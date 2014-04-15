@@ -38,17 +38,17 @@ handle_cast( {msg, Msg}, Socks ) when is_bitstring( Msg ) ->
   handle_cast( {msg, binary_to_list(Msg)}, Socks );
 
 
-% handle_cast( {msg, "/name " ++ Name, Sock}, Socks ) ->
-%   tc_nameserver:set_name( Sock, Name ),
-%   {noreply, Socks};
+handle_cast( {msg, "/name " ++ Name, Sock}, Socks ) ->
+  tc_nameserver:set_name( Sock, Name ),
+  {noreply, Socks};
 
 
 handle_cast( {msg, Msg, FromSock}, Socks ) when is_list( Msg ) ->
   io:format( "Sending a message to all clients~n" ),
-  % UName = tc_nameserver:get_name( FromSock ),
-  % lists:foreach( fun(S) -> gen_tcp:send( S, UName ++ Msg ) end, Socks ),
+  UName = tc_nameserver:get_name( FromSock ),
+  lists:foreach( fun(S) -> gen_tcp:send( S, UName ++ Msg ) end, Socks ),
 
-  lists:foreach( fun(S) -> gen_tcp:send( S, ">" ++  Msg ) end, Socks ),
+  % lists:foreach( fun(S) -> gen_tcp:send( S, ">" ++  Msg ) end, Socks ),
   {noreply , Socks};
 
 

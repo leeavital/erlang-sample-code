@@ -12,7 +12,11 @@ start_link() ->
 
 
 add_client( Socket ) ->
-  supervisor:start_child( ?MODULE, {cli, {tc_client, init, [ Socket ]}, temporary, infinity, worker, dynamic} ),
+  supervisor:start_child( ?MODULE, 
+    {cli, {tc_client, init, 
+    [ Socket ]}, temporary, 
+    infinity, 
+    worker, dynamic} ),
   tc_cli_serve:add_client( Socket ).
 
 
